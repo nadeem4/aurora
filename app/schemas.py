@@ -4,9 +4,10 @@ from typing import List, Optional, Any
 class Message(BaseModel):
     """Represents a single message item."""
     id: str = Field(..., description="Unique identifier of the message")
-    message: str = Field(..., description="Content of the message")
+    user_id: str = Field(..., description="Unique identifier of the user")
     user_name: str = Field(..., description="Author of the message")
-    # Allow extra fields if the API returns more data (like timestamps)
+    timestamp: str = Field(..., description="Timestamp of the message")
+    message: str = Field(..., description="Content of the message")
     model_config = {"extra": "allow"} 
 
 class SearchResponse(BaseModel):
