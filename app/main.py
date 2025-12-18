@@ -46,7 +46,7 @@ async def search(
     """
     start_time = time.time()
     
-    all_results = search_engine.search(q)
+    all_results = search_engine.search(q, top_k=offset + limit)
     
     total_count = len(all_results)
     paginated_results = all_results[offset : offset + limit]
