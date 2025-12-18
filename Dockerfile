@@ -5,12 +5,14 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Pre-download the model to cache it in the image
+ENV RESTRICT_DECODE_ARGS=1
+ENV SENTENCE_TRANSFORMERS_HOME=/app/model_cache
+RUN mkdir -p /app/model_cache
+
 RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('all-MiniLM-L6-v2')"
 
 COPY app/ ./app/
 
-# Create a non-root user for security
 RUN useradd -m appuser && chown -R appuser:appuser /app
 USER appuser
 

@@ -18,39 +18,22 @@ async def fetch_all_messages() -> List[Dict[str, Any]]:
     """
     all_messages = []
     async with httpx.AsyncClient(follow_redirects=True, timeout=60.0) as client:
-        limit = 1000
-        offset = 0
+        limit = 5000 
         
-        while True:
-            for _ in range(3):
-                try:
-                    response = await client.get(API_URL, params={"limit": limit, "offset": offset})
-                    response.raise_for_status()
-                    break
-                except httpx.HTTPStatusError as e:
-                    if e.response.status_code != 401:
-                        print(f"Error fetching data: {e}, retrying...")
-                    await asyncio.sleep(1)
-            else:
-                print("Failed to fetch after 3 attempts.")
+        for _ in range(3):
+            try:
+                response = await client.get(API_URL, params={"limit": limit, "offset": 0})
+                response.raise_for_status()
                 break
-                
-            data = response.json()
-            items = data.get("items", [])
-            total = data.get("total", 0)
+            except httpx.HTTPStatusError as e:
+                if e.response.status_code != 401:
+                    print(f"Error fetching data: {e}, retrying...")
+                await asyncio.sleep(1)
+        else:
+            print("Failed to fetch after 3 attempts.")
+            return []
             
-            if not items:
-                break
-                
-            new_msgs = [item for item in items if item not in all_messages]
-            
-            all_messages.extend(items)
-            offset += len(items)
-            
-            if len(all_messages) >= total:
-                break
-                
-            await asyncio.sleep(0.5)
-
-    print(f"Fetched {len(all_messages)} messages.")
-    return all_messages
+        data = response.json()
+        items = data.get("items", [])
+        print(f"Fetched {len(items)} messages (Limit: {limit}).")
+        return items

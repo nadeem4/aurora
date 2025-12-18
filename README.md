@@ -11,8 +11,8 @@ A high-performance search engine built with Python, FastAPI, and Sentence Transf
 
 ## Data Overview
 
-- **Source**: `https://november7-730026606190.europe-west1.run.app/messages/`
-- **Volume**: **4,000 Messages**.
+- **Source**: `https://november7-730026606190.europe-west1.run.app/docs#/default/get_messages_messages__get`
+- **Volume**: **3349 Messages**.
 - **Process**:
     1. **Ingest**: Fetch JSON data from the remote API.
     2. **Enrich**: Context becomes `User: {name}. Message: {content}`.
@@ -145,11 +145,9 @@ To verify performance, we ran **500 randomized queries** simulating real-world u
 
 ### Methodology
 
-- **Dataset**: ~4,000 messages (fetched from remote API).
 - **Scripts**:
   - `benchmarks/benchmark_search.py`: Tests the public API endpoint (Http Overhead + Inference).
   - `benchmarks/benchmark_internal.py`: Tests the internal engine directly (Inference only).
-- **Environment**: Local Development Machine (CPU).
 
 ### Results
 
